@@ -1,12 +1,11 @@
 package Tasks;
 
-import Tasks.Task;
-
-public class SubEpic extends Task {
+public class SubTask extends Task {
     private int epicId;
 
-    public SubEpic(String taskName, String taskDescription, String taskStatus) {
+    public SubTask(int epicId, String taskName, String taskDescription, String taskStatus) {
         super(taskName, taskDescription, taskStatus);
+        this.epicId = epicId;
     }
 
     @Override
