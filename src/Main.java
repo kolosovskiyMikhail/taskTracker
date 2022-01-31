@@ -29,6 +29,8 @@ public class Main {
         manager.findSubTaskByEpic(epicOne);
         manager.findSubTaskByEpic(epicTwo);
         manager.giveAllEpics();
+        manager.giveAllSubTasks();
+
        
     }
 }
