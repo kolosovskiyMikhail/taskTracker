@@ -19,15 +19,19 @@ public class Main {
         SubTask subTaskThree = new SubTask(2,"Подзадача3", "Описание Подзадачи3", "IN_PROGRESS");
         SubTask subTaskFour = new SubTask(2,"Подзадача4", "Описание Подзадачи4", "NEW");
 
+        manager.saveTask(taskOne);
+        manager.saveTask(taskTwo);
         manager.saveEpic(epicOne);
         manager.saveEpic(epicTwo);
         manager.giveAllEpics();
+        manager.giveAllTasks();
         manager.saveSubTask(subTaskOne);
         manager.saveSubTask(subTaskTwo);
         manager.saveSubTask(subTaskThree);
         manager.saveSubTask(subTaskFour);
         manager.findSubTaskByEpic(epicOne);
         manager.findSubTaskByEpic(epicTwo);
+        manager.removeSubTaskById(4);
         manager.giveAllEpics();
         manager.giveAllSubTasks();
 
