@@ -31,7 +31,7 @@ public class Manager {
         taskMap.put(task.getiD(), task);
     }
 
-    public ArrayList giveAllTasks() { //Вывод всех задач
+    public ArrayList<Task> giveAllTasks() { //Вывод всех задач
         ArrayList<Task> tasks = new ArrayList<>();
         for (Integer tas : taskMap.keySet()) {
             tasks.add(taskMap.get(tas));
@@ -61,7 +61,7 @@ public class Manager {
         epicMap.put(epic.getiD(), epic);
     }
 
-    public ArrayList giveAllEpics() { //Получение списка всех эпиков
+    public ArrayList<Epic> giveAllEpics() { //Получение списка всех эпиков
         ArrayList<Epic> epics = new ArrayList<>();
         for (Integer ep : epicMap.keySet()) {
             epics.add(epicMap.get(ep));
@@ -116,7 +116,7 @@ public class Manager {
         changeEpicStatus(subTask);
     }
 
-    public ArrayList giveAllSubTasks() { //Получение списка всех подзадач
+    public ArrayList<SubTask> giveAllSubTasks() { //Получение списка всех подзадач
         ArrayList<SubTask> subTasks = new ArrayList<>();
         for (Integer ep : subTaskMap.keySet()) {
            subTasks.add(subTaskMap.get(ep));
