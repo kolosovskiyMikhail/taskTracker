@@ -14,15 +14,15 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     HashMap<Integer, SubTask> subTaskMap;
     ArrayList<SubTask> subTasks;
     int taskID;
-    int epicID;
-    int subTaskID;
+    //int epicID;
+    //int subTaskID;
     List<Task> historyList;
     InMemoryHistoryManager history;
 
     public InMemoryTaskManager() {
         taskID = 1;
-        epicID = 1;
-        subTaskID = 1;
+       // epicID = 1;
+        //subTaskID = 1;
         taskMap = new HashMap<>();
         epicMap = new HashMap<>();
         subTaskMap = new HashMap<>();
@@ -70,7 +70,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     //Методы для Эпиков
     @Override
     public void saveEpic(Epic epic) { //Сохранение эпика по идентификатору
-        epic.setiD(epicID++);
+        epic.setiD(taskID++);
         epicMap.put(epic.getiD(), epic);
     }
 
@@ -123,7 +123,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     //Методы для Подзадач
     @Override
     public void saveSubTask(SubTask subTask) { //Сохранение подзадачи по идентификатору
-        subTask.setiD(subTaskID++);
+        subTask.setiD(taskID++);
         subTaskMap.put(subTask.getiD(), subTask);
         if (!(epicMap.get(subTask.getEpicId()).getSubTaskList() == null)) {
             subTasks = epicMap.get(subTask.getEpicId()).getSubTaskList();
