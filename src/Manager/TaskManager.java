@@ -32,7 +32,4 @@ public interface TaskManager {
     ArrayList<SubTask> findSubTaskByEpic(Epic epic);
 
     List<Task> history();
-
-
-
 }

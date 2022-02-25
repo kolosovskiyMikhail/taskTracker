@@ -14,15 +14,11 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     HashMap<Integer, SubTask> subTaskMap;
     ArrayList<SubTask> subTasks;
     int taskID;
-    //int epicID;
-    //int subTaskID;
     List<Task> historyList;
     InMemoryHistoryManager history;
 
     public InMemoryTaskManager() {
         taskID = 1;
-       // epicID = 1;
-        //subTaskID = 1;
         taskMap = new HashMap<>();
         epicMap = new HashMap<>();
         subTaskMap = new HashMap<>();
@@ -178,4 +174,5 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     public List<Task> history() {
         return history.getHistory();
     }
+
 }
