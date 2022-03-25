@@ -74,4 +74,6 @@ public class InMemoryHistoryManager extends Managers implements HistoryManager {
     public void remove(int id) {
         removeNode((Task) lMap.get(id).data);
     }
+
+
 }

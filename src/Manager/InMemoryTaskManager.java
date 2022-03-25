@@ -4,6 +4,7 @@ import Tasks.Epic;
 import Tasks.SubTask;
 import Tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
 
     //Методы для Заданий
     @Override
-    public void saveTask(Task task) { //Сохранение задачи по идентификатору
+    public void saveTask(Task task) throws IOException { //Сохранение задачи по идентификатору
         task.setiD(taskID++);
         taskMap.put(task.getiD(), task);
     }
@@ -43,7 +44,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     }
 
     @Override
-    public Task giveTaskById(int inputTaskID) { //Вывод задачи по идентификатору
+    public Task giveTaskById(int inputTaskID) throws IOException { //Вывод задачи по идентификатору
         history.add(taskMap.get(inputTaskID));
         return taskMap.get(inputTaskID);
     }
@@ -65,7 +66,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
 
     //Методы для Эпиков
     @Override
-    public void saveEpic(Epic epic) { //Сохранение эпика по идентификатору
+    public void saveEpic(Epic epic) throws IOException { //Сохранение эпика по идентификатору
         epic.setiD(taskID++);
         epicMap.put(epic.getiD(), epic);
     }
@@ -80,7 +81,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     }
 
     @Override
-    public Epic giveEpicById(int inputTaskID) { //Получение эпика по идентификатору
+    public Epic giveEpicById(int inputTaskID) throws IOException { //Получение эпика по идентификатору
         history.add(epicMap.get(inputTaskID));
         return epicMap.get(inputTaskID);
     }
@@ -97,7 +98,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     }
 
     @Override
-    public void removeEpicById(int inputEpicID) { //Удаление эпика по идентификатору
+    public void removeEpicById(int inputEpicID) throws IOException { //Удаление эпика по идентификатору
         for (SubTask sub : epicMap.get(inputEpicID).getSubTaskList()) {
             removeSubTaskById(sub.getiD());
         }
@@ -118,7 +119,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
 
     //Методы для Подзадач
     @Override
-    public void saveSubTask(SubTask subTask) { //Сохранение подзадачи по идентификатору
+    public void saveSubTask(SubTask subTask) throws IOException { //Сохранение подзадачи по идентификатору
         subTask.setiD(taskID++);
         subTaskMap.put(subTask.getiD(), subTask);
         if (!(epicMap.get(subTask.getEpicId()).getSubTaskList() == null)) {
@@ -142,7 +143,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     }
 
     @Override
-    public SubTask giveSubTaskById(int inputSubTaskID) { //Получение подзадачи по идентификатору
+    public SubTask giveSubTaskById(int inputSubTaskID) throws IOException { //Получение подзадачи по идентификатору
         history.add(subTaskMap.get(inputSubTaskID));
         return subTaskMap.get(inputSubTaskID);
     }
@@ -159,7 +160,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     }
 
     @Override
-    public void removeSubTaskById(int inputSubTaskID) { //Удаление подзадачи по идентификатору
+    public void removeSubTaskById(int inputSubTaskID) throws IOException { //Удаление подзадачи по идентификатору
         epicMap.get(giveSubTaskById(inputSubTaskID).getEpicId()).getSubTaskList().remove(giveSubTaskById(inputSubTaskID));
         changeEpicStatus(giveSubTaskById(inputSubTaskID));
         subTaskMap.remove(inputSubTaskID);

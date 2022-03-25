@@ -1,5 +1,7 @@
 package Tasks;
 
+import Manager.TaskType;
+
 public class SubTask extends Task {
     private int epicId;
 
@@ -15,11 +17,12 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "Tasks.SubEpic{" +
+        /*return "Tasks.SubEpic{" +
                 "taskName='" + getTaskName() + '\'' +
                 ", taskDescription='" + getTaskDescription() + '\'' +
                 ", taskStatus='" + getTaskStatus() + '\'' +
-                '}';
+                '}';*/
+        return getiD() + "," + TaskType.SUBTASK + "," + getTaskName() + "," + getTaskStatus() + "," + getTaskDescription() + "," + epicId;
     }
 
     public int getEpicId() {
