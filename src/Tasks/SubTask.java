@@ -2,11 +2,16 @@ package Tasks;
 
 import Manager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 public class SubTask extends Task {
     private int epicId;
 
-    public SubTask(int epicId, String taskName, String taskDescription, String taskStatus) {
-        super(taskName, taskDescription, taskStatus);
+    public SubTask(int epicId, String taskName, String taskDescription, String taskStatus, LocalDateTime startTime, Duration duration) {
+        super(taskName, taskDescription, taskStatus, startTime, duration);
         this.epicId = epicId;
     }
 
@@ -17,12 +22,9 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        /*return "Tasks.SubEpic{" +
-                "taskName='" + getTaskName() + '\'' +
-                ", taskDescription='" + getTaskDescription() + '\'' +
-                ", taskStatus='" + getTaskStatus() + '\'' +
-                '}';*/
-        return getiD() + "," + TaskType.SUBTASK + "," + getTaskName() + "," + getTaskStatus() + "," + getTaskDescription() + "," + epicId;
+        return getiD() + "," + TaskType.SUBTASK + "," + getTaskName() + "," + getTaskStatus() + "," +
+                getTaskDescription() + "," + getStartTime().toString() + "," + getEndTime() + "," +
+                getDuration().toString() + "," + epicId;
     }
 
     public int getEpicId() {
@@ -76,5 +78,30 @@ public class SubTask extends Task {
     @Override
     public void setiD(int iD) {
         super.setiD(iD);
+    }
+
+    @Override
+    public Duration getDuration() {
+        return super.getDuration();
+    }
+
+    @Override
+    public void setDuration(Duration duration) {
+        super.setDuration(duration);
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        return super.getStartTime();
+    }
+
+    @Override
+    public void setStartTime(LocalDateTime startTime) {
+        super.setStartTime(startTime);
+    }
+
+    //@Override
+    public LocalDateTime getEndTime() {
+        return getStartTime().plus(getDuration());
     }
 }

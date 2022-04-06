@@ -5,6 +5,8 @@ import Tasks.SubTask;
 import Tasks.Task;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +17,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         this.fileName = fileName;
     }
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         loadFromFile("tasks.csv");
-    }
+    }*/
 
     @Override
     public void saveTask(Task task) throws IOException {
@@ -46,6 +48,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     @Override
+    public void refreshEpic(Epic epic) throws IOException {
+        super.refreshEpic(epic);
+        save();
+    }
+
+    @Override
     public SubTask giveSubTaskById(int inputSubTaskID) throws IOException {
         history.add(subTaskMap.get(inputSubTaskID));
         save();
@@ -71,7 +79,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
     public void save() throws IOException {
         try (Writer fileWriter = new FileWriter(fileName)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
+            fileWriter.write("id,type,name,status,description,startTime,endTime,duration,epic\n");
             if (!taskMap.isEmpty()) {
                 for (Integer t : taskMap.keySet()) {
                     fileWriter.write(taskMap.get(t).toString());
@@ -89,6 +97,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                     fileWriter.write(subTaskMap.get(t).toString());
                     fileWriter.write("\n");
                 }
+
             }
             fileWriter.write("\n");
             fileWriter.write(historyToString(history));
@@ -97,7 +106,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
     }
 
-    static FileBackedTasksManager loadFromFile(String fileName) throws IOException {
+    public FileBackedTasksManager loadFromFile(String fileName) throws IOException {
         FileBackedTasksManager fb = new FileBackedTasksManager(fileName);
         List<String> lines = new ArrayList<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
@@ -105,9 +114,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 lines.add(fileReader.readLine());
             }
             for (int i = 1; i < lines.size(); i++) {
-                if (!lines.get(i).isBlank()) {
+                if (!lines.get(i).isBlank() /*|| lines.get(lines.size()-1).isBlank()*/) {
                     if (lines.get(i).split(",")[1].equals(String.valueOf(TaskType.TASK))) {
-                        Task task = new Task(lines.get(i).split(",")[2], lines.get(i).split(",")[4], lines.get(i).split(",")[3]);
+                        Task task = new Task(lines.get(i).split(",")[2], lines.get(i).split(",")[4],
+                                lines.get(i).split(",")[3], LocalDateTime.parse(lines.get(i).split(",")[5]),
+                                Duration.parse(lines.get(i).split(",")[7]));
                         fb.taskMap.put(Integer.valueOf(lines.get(i).split(",")[0]), task);
                         task.setiD(Integer.parseInt(lines.get(i).split(",")[0]));
                     } else if (lines.get(i).split(",")[1].equals(String.valueOf(TaskType.EPIC))) {
@@ -115,11 +126,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                         fb.epicMap.put(Integer.valueOf(lines.get(i).split(",")[0]), epic);
                         epic.setiD(Integer.parseInt(lines.get(i).split(",")[0]));
                     } else if (lines.get(i).split(",")[1].equals(String.valueOf(TaskType.SUBTASK))) {
-                        SubTask subTask = new SubTask(Integer.valueOf(lines.get(i).split(",")[5]), lines.get(i).split(",")[2], lines.get(i).split(",")[4], lines.get(i).split(",")[3]);
+                        SubTask subTask = new SubTask(Integer.valueOf(lines.get(i).split(",")[8]), lines.get(i).split(",")[2],
+                                lines.get(i).split(",")[4], lines.get(i).split(",")[3], LocalDateTime.parse(lines.get(i).split(",")[5]),
+                                Duration.parse(lines.get(i).split(",")[7]));
                         fb.subTaskMap.put(Integer.valueOf(lines.get(i).split(",")[0]), subTask);
                         subTask.setiD(Integer.parseInt(lines.get(i).split(",")[0]));
                     }
-
                 } else {
                     for (Integer h : historyFromString(lines.get(i + 1))) {
                         if (fb.taskMap.containsKey(h)) {

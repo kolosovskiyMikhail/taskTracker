@@ -1,9 +1,7 @@
-id,type,name,status,description,epic
-1,TASK,ЗД1,NEW,О1
-2,TASK,ЗД2,NEW,О2
-3,EPIC,ЭП1,DONE,О1
-4,EPIC,ЭП2,NEW,О2
-5,SUBTASK,Подзадача2,DONE,Описание Подзадачи2,3
-6,SUBTASK,Подзадача2,DONE,Описание Подзадачи2,3
+id,type,name,status,description,startTime,endTime,duration,epic
+1,TASK,T1,NEW,D1,2022-04-01T12:00,2022-04-01T13:00,PT1H
+2,EPIC,E1,DONE,D1,2022-04-01T12:00,2022-04-01T14:01,PT2H
+3,SUBTASK,S1,DONE,D1,2022-04-01T12:00,2022-04-01T13:00,PT1H,2
+4,SUBTASK,S2,DONE,D2,2022-04-01T13:01,2022-04-01T14:01,PT1H,2
 
-1,2,4
+1,2,3,4

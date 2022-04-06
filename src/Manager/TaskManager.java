@@ -7,6 +7,7 @@ import Tasks.Task;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -16,11 +17,12 @@ public interface TaskManager {
     void removeAllTasks();
     void removeTaskById(int inputTaskID);
     void refreshTask(Task task);
+    TreeSet<Task> getPrioritizedTasks();
 
     void saveEpic(Epic epic) throws IOException;
     ArrayList<Epic> giveAllEpics();
     Epic giveEpicById(int inputTaskID) throws IOException;
-    void refreshEpic(Epic epic);
+    void refreshEpic(Epic epic) throws IOException;
     void removeAllEpics();
     void removeEpicById(int inputEpicID) throws IOException;
 
@@ -31,6 +33,8 @@ public interface TaskManager {
     void removeAllSubTasks();
     void removeSubTaskById(int inputSubTaskID) throws IOException;
     ArrayList<SubTask> findSubTaskByEpic(Epic epic);
+    TreeSet<SubTask> getPrioritizedSubTasks();
 
     List<Task> history();
+
 }

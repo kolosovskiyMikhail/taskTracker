@@ -2,6 +2,8 @@ package Tasks;
 
 import Manager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -9,7 +11,17 @@ public class Task {
     private String taskDescription;
     private String taskStatus;
     private int iD;
+    private Duration duration;
+    private LocalDateTime startTime;
 
+    public Task(String taskName, String taskDescription, String taskStatus, LocalDateTime startTime, Duration duration) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskStatus = taskStatus;
+        this.iD = iD;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
 
     public Task(String taskName, String taskDescription, String taskStatus) {
         this.taskName = taskName;
@@ -23,22 +35,36 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(taskName, task.taskName) && Objects.equals(taskDescription, task.taskDescription) && Objects.equals(taskStatus, task.taskStatus);
+        return iD == task.iD && Objects.equals(taskName, task.taskName) && Objects.equals(taskDescription,
+                task.taskDescription) && Objects.equals(taskStatus, task.taskStatus) && Objects.equals(duration, task.duration)
+                && Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taskName, taskDescription, taskStatus);
+        return Objects.hash(taskName, taskDescription, taskStatus, iD, duration, startTime);
     }
 
     @Override
     public String toString() {
-        /*return "Task.Task{" +
-                "taskName='" + taskName + '\'' +
-                ", taskDescription='" + taskDescription + '\'' +
-                ", taskStatus='" + taskStatus + '\'' +
-                '}';*/
-        return iD + "," + TaskType.TASK + "," + taskName + "," + taskStatus + "," + taskDescription;
+        return iD + "," + TaskType.TASK + "," + taskName + "," + taskStatus + "," + 
+                taskDescription + "," + startTime.toString() + "," + getEndTime().toString() + "," + duration.toString();
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public String getTaskName() {
@@ -73,4 +99,7 @@ public class Task {
         this.iD = iD;
     }
 
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
 }

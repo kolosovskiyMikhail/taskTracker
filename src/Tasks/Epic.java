@@ -2,10 +2,16 @@ package Tasks;
 
 import Manager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
-public class Epic extends Task {
-    private ArrayList<SubTask> subTaskList;
+public class Epic extends Tasks.Task {
+    private ArrayList<Tasks.SubTask> subTaskList;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private Duration duration;
 
     public Epic(String taskName, String taskDescription, String taskStatus) {
         super(taskName, taskDescription, taskStatus);
@@ -71,11 +77,59 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        /*return "Tasks.Epic{" +
-                "taskName='" + getTaskName() + '\'' +
-                ", taskDescription='" + getTaskDescription() + '\'' +
-                ", taskStatus='" + getTaskStatus() + '\'' +
-                '}';*/
-        return getiD() + "," + TaskType.EPIC + "," + getTaskName() + "," + getTaskStatus() + "," + getTaskDescription();
+        if (getStartTime() == null || getEndTime() == null || getDuration() == null) {
+            return getiD() + "," + TaskType.EPIC + "," + getTaskName() + "," + getTaskStatus() + "," +
+                    getTaskDescription();
+        } else return getiD() + "," + TaskType.EPIC + "," + getTaskName() + "," + getTaskStatus() + "," +
+                getTaskDescription() + "," + getStartTime().toString() + "," + getEndTime().toString() + "," + getDuration().toString();
+    }
+
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    @Override
+    public void setDuration(Duration durat) {
+        if (!subTaskList.isEmpty()) {
+            for (SubTask s : subTaskList) {
+                if (!(durat == null)) {
+                    duration = durat.plus(s.getDuration());
+                } else duration = s.getDuration();
+            }
+        }
+    }
+
+    public void setStartTime(LocalDateTime start) {
+        if (!subTaskList.isEmpty()) {
+            for (SubTask s : subTaskList) {
+                if (!(startTime == null)) {
+                    if (s.getStartTime().isBefore(start)) {
+                        startTime = s.getStartTime();
+                    }
+                } else startTime = s.getStartTime();
+            }
+        }
+    }
+   // @Override
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setEndTime(LocalDateTime end) {
+        if (!subTaskList.isEmpty()) {
+            for (SubTask s : subTaskList) {
+                if (!(endTime == null)) {
+                    if (s.getEndTime().isAfter(end)) {
+                        endTime = s.getEndTime();
+                    }
+                } else endTime = s.getEndTime();
+            }
+        }
+    }
+
+    //@Override
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 }

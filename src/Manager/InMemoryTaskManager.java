@@ -5,9 +5,7 @@ import Tasks.SubTask;
 import Tasks.Task;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager extends Managers implements TaskManager{
     HashMap<Integer, Task> taskMap;
@@ -17,6 +15,8 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     int taskID;
     List<Task> historyList;
     InMemoryHistoryManager history;
+    TreeSet<Task> sortedTasks;
+    TreeSet<SubTask> sortedSubTasks;
 
     public InMemoryTaskManager() {
         taskID = 1;
@@ -30,8 +30,10 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     //Методы для Заданий
     @Override
     public void saveTask(Task task) throws IOException { //Сохранение задачи по идентификатору
-        task.setiD(taskID++);
-        taskMap.put(task.getiD(), task);
+        if (taskValidation(task)) {
+            task.setiD(taskID++);
+            taskMap.put(task.getiD(), task);
+        }
     }
 
     @Override
@@ -61,7 +63,9 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
 
     @Override
     public void refreshTask(Task task) { //Обновление задачи
-        taskMap.put(task.getiD(), task);
+        if (taskValidation(task)) {
+            taskMap.put(task.getiD(), task);
+        }
     }
 
     //Методы для Эпиков
@@ -87,7 +91,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
     }
 
     @Override
-    public void refreshEpic(Epic epic) { //Обновление эпика
+    public void refreshEpic(Epic epic) throws IOException { //Обновление эпика
         epicMap.put(epic.getiD(), epic);
     }
 
@@ -99,10 +103,11 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
 
     @Override
     public void removeEpicById(int inputEpicID) throws IOException { //Удаление эпика по идентификатору
-        for (SubTask sub : epicMap.get(inputEpicID).getSubTaskList()) {
-            removeSubTaskById(sub.getiD());
-        }
-        epicMap.remove(inputEpicID);
+        if (!(epicMap.get(inputEpicID).getSubTaskList() == null)) {
+            for (SubTask sub : epicMap.get(inputEpicID).getSubTaskList()) {
+                removeSubTaskById(sub.getiD());
+            }
+        } else epicMap.remove(inputEpicID);
     }
 
     public void changeEpicStatus(SubTask subTask) { //Изенение статуса эпика
@@ -119,18 +124,23 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
 
     //Методы для Подзадач
     @Override
-    public void saveSubTask(SubTask subTask) throws IOException { //Сохранение подзадачи по идентификатору
-        subTask.setiD(taskID++);
-        subTaskMap.put(subTask.getiD(), subTask);
-        if (!(epicMap.get(subTask.getEpicId()).getSubTaskList() == null)) {
-            subTasks = epicMap.get(subTask.getEpicId()).getSubTaskList();
-            subTasks.add(subTask);
-        } else {
-            subTasks = new ArrayList<>();
-            subTasks.add(subTask);
+    public void saveSubTask(SubTask subTask) { //Сохранение подзадачи по идентификатору
+        if (subTaskValidation(subTask)) {
+            subTask.setiD(taskID++);
+            subTaskMap.put(subTask.getiD(), subTask);
+            if (!(epicMap.get(subTask.getEpicId()).getSubTaskList() == null)) {
+                subTasks = epicMap.get(subTask.getEpicId()).getSubTaskList();
+                subTasks.add(subTask);
+            } else {
+                subTasks = new ArrayList<>();
+                subTasks.add(subTask);
+            }
+            epicMap.get(subTask.getEpicId()).setSubTaskList(subTasks);
+            changeEpicStatus(subTask);
+            epicMap.get(subTask.getEpicId()).setDuration(epicMap.get(subTask.getEpicId()).getDuration());
+            epicMap.get(subTask.getEpicId()).setStartTime(epicMap.get(subTask.getEpicId()).getStartTime());
+            (epicMap.get(subTask.getEpicId())).setEndTime(epicMap.get(subTask.getEpicId()).getEndTime());
         }
-        epicMap.get(subTask.getEpicId()).setSubTaskList(subTasks);
-        changeEpicStatus(subTask);
     }
 
     @Override
@@ -150,7 +160,9 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
 
     @Override
     public void refreshSubTask(SubTask subTask) { //Обновление подзадачи
-        subTaskMap.put(subTask.getiD(), subTask);
+        if (subTaskValidation(subTask)) {
+            subTaskMap.put(subTask.getiD(), subTask);
+        }
         changeEpicStatus(subTask);
     }
 
@@ -176,4 +188,43 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
         return history.getHistory();
     }
 
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        sortedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+        sortedTasks.addAll(taskMap.values());
+        return sortedTasks;
+    }
+
+    @Override
+    public TreeSet<SubTask> getPrioritizedSubTasks() {
+        sortedSubTasks = new TreeSet<>(Comparator.comparing(SubTask::getStartTime));
+        sortedSubTasks.addAll(subTaskMap.values());
+        return sortedSubTasks;
+    }
+
+    public boolean taskValidation(Task task) {
+        boolean b = false;
+        if (!taskMap.isEmpty()) {
+            for (Task t : getPrioritizedTasks()) {
+               if (task.getStartTime().isAfter(t.getEndTime()) || task.getStartTime().equals(t.getEndTime())) {
+                   b = true;
+                   break;
+                }
+            }
+        } else b = true;
+        return b;
+    }
+
+    public boolean subTaskValidation(SubTask subTask) {
+        boolean b = false;
+        if (!subTaskMap.isEmpty()) {
+            for (Task t : getPrioritizedSubTasks()) {
+                if (subTask.getStartTime().isAfter(t.getEndTime())) {
+                    b = true;
+                    break;
+                }
+            }
+        } else b = true;
+        return b;
+    }
 }
