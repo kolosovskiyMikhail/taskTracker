@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.SubmissionPublisher;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InMemoryTaskManagerTest {
     public InMemoryTaskManager manager;
@@ -156,6 +157,7 @@ class InMemoryTaskManagerTest {
         assertEquals("IN_PROGRESS", epic2.getTaskStatus());
         assertEquals(LocalDateTime.of(2022, 04, 01, 12, 0), epic1.getStartTime());
         assertEquals(LocalDateTime.of(2022, 04, 01, 14, 1), epic1.getEndTime());
+        assertEquals(Duration.ofMinutes(120), epic1.getDuration());
         assertEquals(LocalDateTime.of(2022, 04, 01, 15, 0), epic2.getStartTime());
         assertEquals(LocalDateTime.of(2022, 04, 01, 16, 0), epic2.getEndTime());
     }

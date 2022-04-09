@@ -1,5 +1,6 @@
 package Manager;
 
+import Other.TaskType;
 import Tasks.Epic;
 import Tasks.SubTask;
 import Tasks.Task;
@@ -114,7 +115,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 lines.add(fileReader.readLine());
             }
             for (int i = 1; i < lines.size(); i++) {
-                if (!lines.get(i).isBlank() /*|| lines.get(lines.size()-1).isBlank()*/) {
+                if (!lines.get(i).isBlank()) {
                     if (lines.get(i).split(",")[1].equals(String.valueOf(TaskType.TASK))) {
                         Task task = new Task(lines.get(i).split(",")[2], lines.get(i).split(",")[4],
                                 lines.get(i).split(",")[3], LocalDateTime.parse(lines.get(i).split(",")[5]),
@@ -125,6 +126,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                         Epic epic = new Epic(lines.get(i).split(",")[2], lines.get(i).split(",")[4], lines.get(i).split(",")[3]);
                         fb.epicMap.put(Integer.valueOf(lines.get(i).split(",")[0]), epic);
                         epic.setiD(Integer.parseInt(lines.get(i).split(",")[0]));
+                        epic.setStartTime(LocalDateTime.parse(lines.get(i).split(",")[5]));
+                        epic.setDuration(Duration.parse(lines.get(i).split(",")[7]));
                     } else if (lines.get(i).split(",")[1].equals(String.valueOf(TaskType.SUBTASK))) {
                         SubTask subTask = new SubTask(Integer.valueOf(lines.get(i).split(",")[8]), lines.get(i).split(",")[2],
                                 lines.get(i).split(",")[4], lines.get(i).split(",")[3], LocalDateTime.parse(lines.get(i).split(",")[5]),

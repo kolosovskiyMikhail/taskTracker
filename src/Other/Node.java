@@ -1,4 +1,4 @@
-package Manager;
+package Other;
 
 public class Node<T> {
     public T data;

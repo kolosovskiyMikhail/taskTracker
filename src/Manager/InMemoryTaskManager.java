@@ -1,10 +1,12 @@
 package Manager;
 
+import Other.Status;
 import Tasks.Epic;
 import Tasks.SubTask;
 import Tasks.Task;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.*;
 
 public class InMemoryTaskManager extends Managers implements TaskManager{
@@ -122,6 +124,21 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
         }
     }
 
+    public void epicTime (SubTask subTask) {
+        Duration durat = epicMap.get(subTask.getEpicId()).getDuration();
+        for (SubTask sub : epicMap.get(subTask.getEpicId()).getSubTaskList()) {
+            if (!(epicMap.get(subTask.getEpicId()).getStartTime() == null)) {
+                if (sub.getStartTime().isBefore(epicMap.get(subTask.getEpicId()).getStartTime())) {
+                    epicMap.get(subTask.getEpicId()).setStartTime(sub.getStartTime());
+                }
+            } else epicMap.get(subTask.getEpicId()).setStartTime(sub.getStartTime());
+
+            if (!(durat == null)) {
+                epicMap.get(subTask.getEpicId()).setDuration(durat.plus(sub.getDuration()));
+            } else epicMap.get(subTask.getEpicId()).setDuration(sub.getDuration());
+        }
+    }
+
     //Методы для Подзадач
     @Override
     public void saveSubTask(SubTask subTask) { //Сохранение подзадачи по идентификатору
@@ -137,9 +154,9 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
             }
             epicMap.get(subTask.getEpicId()).setSubTaskList(subTasks);
             changeEpicStatus(subTask);
-            epicMap.get(subTask.getEpicId()).setDuration(epicMap.get(subTask.getEpicId()).getDuration());
-            epicMap.get(subTask.getEpicId()).setStartTime(epicMap.get(subTask.getEpicId()).getStartTime());
+            epicTime(subTask);
             (epicMap.get(subTask.getEpicId())).setEndTime(epicMap.get(subTask.getEpicId()).getEndTime());
+
         }
     }
 
