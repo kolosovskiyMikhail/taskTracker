@@ -1,6 +1,6 @@
 package Manager;
 
-import Other.Status;
+import Enum.Status;
 import Tasks.Epic;
 import Tasks.SubTask;
 import Tasks.Task;
@@ -112,7 +112,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
         } else epicMap.remove(inputEpicID);
     }
 
-    public void changeEpicStatus(SubTask subTask) { //Изенение статуса эпика
+    private void changeEpicStatus(SubTask subTask) { //Изенение статуса эпика
         for (SubTask sub : epicMap.get(subTask.getEpicId()).getSubTaskList()) {
             if (sub.getTaskStatus().equals(String.valueOf(Status.NEW)) || (epicMap.get(sub.getEpicId()).getSubTaskList() == null)) {
                 epicMap.get(sub.getEpicId()).setTaskStatus(String.valueOf(Status.NEW));
@@ -124,7 +124,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
         }
     }
 
-    public void epicTime (SubTask subTask) {
+    private void changeEpicStartTimeAndDuration (SubTask subTask) {
         Duration durat = epicMap.get(subTask.getEpicId()).getDuration();
         for (SubTask sub : epicMap.get(subTask.getEpicId()).getSubTaskList()) {
             if (!(epicMap.get(subTask.getEpicId()).getStartTime() == null)) {
@@ -154,7 +154,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager{
             }
             epicMap.get(subTask.getEpicId()).setSubTaskList(subTasks);
             changeEpicStatus(subTask);
-            epicTime(subTask);
+            changeEpicStartTimeAndDuration(subTask);
             (epicMap.get(subTask.getEpicId())).setEndTime(epicMap.get(subTask.getEpicId()).getEndTime());
 
         }

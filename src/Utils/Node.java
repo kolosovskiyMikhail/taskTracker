@@ -1,4 +1,4 @@
-package Other;
+package Utils;
 
 public class Node<T> {
     public T data;
