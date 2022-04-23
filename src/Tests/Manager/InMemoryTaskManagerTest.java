@@ -25,7 +25,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void saveTask() throws IOException {
+    void saveTask() throws IOException, InterruptedException {
         Task task = new Task("T1", "D1", "NEW", LocalDateTime.of(2022, 04, 01, 12, 0), Duration.ofMinutes(60));
         manager.saveTask(task);
         int taskId = task.getiD();
@@ -34,7 +34,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void giveAllTasks() throws IOException {
+    void giveAllTasks() throws IOException, InterruptedException {
         Task task = new Task("T1", "D1", "NEW", LocalDateTime.of(2022, 04, 01, 12, 0), Duration.ofMinutes(60));
         manager.saveTask(task);
         ArrayList<Task> tasksList = manager.giveAllTasks();
@@ -44,7 +44,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void giveTaskById() throws IOException {
+    void giveTaskById() throws IOException, InterruptedException {
         Task task = new Task("T1", "D1", "NEW", LocalDateTime.of(2022, 04, 01, 12, 0), Duration.ofMinutes(60));
         manager.saveTask(task);
         assertEquals(task, manager.giveTaskById(1));
@@ -52,7 +52,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeAllTasks() throws IOException {
+    void removeAllTasks() throws IOException, InterruptedException {
         Task task = new Task("T1", "D1", "NEW", LocalDateTime.of(2022, 04, 01, 12, 0), Duration.ofMinutes(60));
         manager.saveTask(task);
         manager.removeAllTasks();
@@ -60,7 +60,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeTaskById() throws IOException {
+    void removeTaskById() throws IOException, InterruptedException {
         Task task = new Task("T1", "D1", "NEW", LocalDateTime.of(2022, 04, 01, 12, 0), Duration.ofMinutes(60));
         manager.saveTask(task);
         manager.removeTaskById(1);
@@ -68,7 +68,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void refreshTask() throws IOException {
+    void refreshTask() throws IOException, InterruptedException {
         Task task = new Task("T1", "D1", "NEW", LocalDateTime.of(2022, 04, 01, 12, 0), Duration.ofMinutes(60));
         manager.saveTask(task);
         task.setTaskStatus("DONE");
@@ -77,7 +77,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void saveEpic() throws IOException {
+    void saveEpic() throws IOException, InterruptedException {
         Epic epic = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic);
         int epicId = epic.getiD();
@@ -87,7 +87,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void giveAllEpics() throws IOException {
+    void giveAllEpics() throws IOException, InterruptedException {
         Epic epic = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic);
         ArrayList<Epic> epicList = manager.giveAllEpics();
@@ -97,7 +97,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void giveEpicById() throws IOException {
+    void giveEpicById() throws IOException, InterruptedException {
         Epic epic = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic);
         assertEquals(epic, manager.giveEpicById(1));
@@ -105,7 +105,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void refreshEpic() throws IOException {
+    void refreshEpic() throws IOException, InterruptedException {
         Epic epic = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic);
         epic.setTaskName("E11");
@@ -114,7 +114,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeAllEpics() throws IOException {
+    void removeAllEpics() throws IOException, InterruptedException {
         Epic epic = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic);
         manager.removeAllEpics();
@@ -122,7 +122,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeEpicById() throws IOException {
+    void removeEpicById() throws IOException, InterruptedException {
         Epic epic = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic);
         manager.removeEpicById(1);
@@ -130,7 +130,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void saveSubTask() throws IOException {
+    void saveSubTask() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         Epic epic2 = new Epic("E1", "D1", "NEW");
@@ -163,7 +163,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void giveAllSubTasks() throws IOException {
+    void giveAllSubTasks() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         SubTask subTask1 = new SubTask(epic1.getiD(), "S1", "D1", "DONE",
@@ -176,7 +176,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void giveSubTaskById() throws IOException {
+    void giveSubTaskById() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         SubTask subTask1 = new SubTask(epic1.getiD(), "S1", "D1", "DONE",
@@ -187,7 +187,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void refreshSubTask() throws IOException {
+    void refreshSubTask() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         SubTask subTask1 = new SubTask(epic1.getiD(), "S1", "D1", "DONE",
@@ -200,7 +200,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeAllSubTasks() throws IOException {
+    void removeAllSubTasks() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         SubTask subTask1 = new SubTask(epic1.getiD(), "S1", "D1", "DONE",
@@ -211,7 +211,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removeSubTaskById() throws IOException {
+    void removeSubTaskById() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         SubTask subTask1 = new SubTask(epic1.getiD(), "S1", "D1", "DONE",
@@ -223,7 +223,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void findSubTaskByEpic() throws IOException {
+    void findSubTaskByEpic() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         SubTask subTask1 = new SubTask(epic1.getiD(), "S1", "D1", "DONE",
@@ -234,7 +234,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void history() throws IOException {
+    void history() throws IOException, InterruptedException {
         Epic epic1 = new Epic("E1", "D1", "NEW");
         manager.saveEpic(epic1);
         SubTask subTask1 = new SubTask(epic1.getiD(), "S1", "D1", "DONE",

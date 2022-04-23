@@ -19,44 +19,47 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         this.fileName = fileName;
     }
 
+    public FileBackedTasksManager() {
+    }
+
     /*public static void main(String[] args) throws IOException {
         loadFromFile("tasks.csv");
     }*/
 
     @Override
-    public void saveTask(Task task) throws IOException {
+    public void saveTask(Task task) throws IOException, InterruptedException {
         super.saveTask(task);
         save();
     }
 
     @Override
-    public void saveEpic(Epic epic) throws IOException {
+    public void saveEpic(Epic epic) throws IOException, InterruptedException {
         super.saveEpic(epic);
         save();
     }
 
     @Override
-    public Task giveTaskById(int inputTaskID) throws IOException {
+    public Task giveTaskById(int inputTaskID) throws IOException, InterruptedException {
         history.add(taskMap.get(inputTaskID));
         save();
         return super.giveTaskById(inputTaskID);
     }
 
     @Override
-    public Epic giveEpicById(int inputTaskID) throws IOException {
+    public Epic giveEpicById(int inputTaskID) throws IOException, InterruptedException {
         history.add(epicMap.get(inputTaskID));
         save();
         return super.giveEpicById(inputTaskID);
     }
 
     @Override
-    public void refreshEpic(Epic epic) throws IOException {
+    public void refreshEpic(Epic epic) throws IOException, InterruptedException {
         super.refreshEpic(epic);
         save();
     }
 
     @Override
-    public SubTask giveSubTaskById(int inputSubTaskID) throws IOException {
+    public SubTask giveSubTaskById(int inputSubTaskID) throws IOException, InterruptedException {
         history.add(subTaskMap.get(inputSubTaskID));
         save();
         return super.giveSubTaskById(inputSubTaskID);
@@ -79,7 +82,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return historyList;
     }
 
-    public void save() throws IOException {
+    public void save() throws IOException, InterruptedException {
         try (Writer fileWriter = new FileWriter(fileName)) {
             fileWriter.write("id,type,name,status,description,startTime,endTime,duration,epic\n");
             if (!taskMap.isEmpty()) {

@@ -1,3 +1,6 @@
+import Http.HttpTaskServer;
+import Http.KVServer;
+import Http.KVTaskClient;
 import Manager.*;
 import Tasks.Epic;
 import Tasks.SubTask;
@@ -6,10 +9,22 @@ import Tasks.Task;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         /*Managers<TaskManager> manage = new InMemoryTaskManager();
         InMemoryHistoryManager hist = new InMemoryHistoryManager();*/
-        FileBackedTasksManager fb = new FileBackedTasksManager("D://2/tasks.csv");
+        //FileBackedTasksManager fb = new FileBackedTasksManager("E://2/tasks.csv");
+        /*Managers<TaskManager> fb = new FileBackedTasksManager("E://2/tasks.csv");
+
+        HttpTaskServer srv = new HttpTaskServer(fb.getDefaults());
+        srv.startServer();*/
+
+        new KVServer().start();
+        KVTaskClient kv = new KVTaskClient("http://localhost:8080");
+        kv.put("F", "name");
+        System.out.println(kv.load("F"));
+
+
+
 
         /*Task taskOne = new Task("ЗД1", "О1", "NEW");
         Task taskTwo = new Task("ЗД2", "О2", "NEW");

@@ -17,7 +17,7 @@ class FileBackedTasksManagerTest {
     public FileBackedTasksManager loadTaskManager;
 
     @Test
-    void saveTest() throws IOException {
+    void saveTest() throws IOException, InterruptedException {
         fileManager = new FileBackedTasksManager("tasks.csv");
         Task task = new Task("T1", "D1", "NEW", LocalDateTime.of(2022, 04, 01, 12, 0), Duration.ofMinutes(60));
         fileManager.saveTask(task);
