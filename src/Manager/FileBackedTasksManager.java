@@ -82,6 +82,48 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         return historyList;
     }
 
+    @Override
+    public void removeAllTasks() throws IOException, InterruptedException {
+        super.removeAllTasks();
+        save();
+    }
+
+    @Override
+    public void removeTaskById(int inputTaskID) throws IOException, InterruptedException {
+        super.removeTaskById(inputTaskID);
+        save();
+    }
+
+    @Override
+    public void removeAllEpics() throws IOException, InterruptedException {
+        super.removeAllEpics();
+        save();
+    }
+
+    @Override
+    public void removeEpicById(int inputEpicID) throws IOException, InterruptedException {
+        super.removeEpicById(inputEpicID);
+        save();
+    }
+
+    @Override
+    public void saveSubTask(SubTask subTask) throws IOException, InterruptedException {
+        super.saveSubTask(subTask);
+        save();
+    }
+
+    @Override
+    public void removeAllSubTasks() throws IOException, InterruptedException {
+        super.removeAllSubTasks();
+        save();
+    }
+
+    @Override
+    public void removeSubTaskById(int inputSubTaskID) throws IOException, InterruptedException {
+        super.removeSubTaskById(inputSubTaskID);
+        save();
+    }
+
     public void save() throws IOException, InterruptedException {
         try (Writer fileWriter = new FileWriter(fileName)) {
             fileWriter.write("id,type,name,status,description,startTime,endTime,duration,epic\n");

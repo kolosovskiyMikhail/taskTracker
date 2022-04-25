@@ -13,10 +13,7 @@ public class KVTaskClient {
 
     public KVTaskClient(String url) throws IOException, InterruptedException {
         this.url = url;
-        client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url + "/register")).GET().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        API_KEY = response.body();
+        register();
     }
 
     public void put(String key, String json) throws IOException, InterruptedException {
@@ -34,5 +31,12 @@ public class KVTaskClient {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
+    }
+
+    private void register() throws IOException, InterruptedException {
+        client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url + "/register")).GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        API_KEY = response.body();
     }
 }
